@@ -11,20 +11,40 @@ export function login (data) {
    })
 }
 
-// 学生列表查询接口
-export function students (params) {
+// 注册接口
+export function register () {
+   return service({
+      method: 'post',
+      url: '/register'
+   })
+}
+
+// 老人列表查询接口
+export function getElder (params) {
    return service({
       method: 'get',
-      url: '/students',
+      url: '/elder',
       params
    })
 }
 
-// 学生列表删除接口
-export function studentDel (id) {
+// 老人列表新增接口
+export function elder (type, data) {
+   data = qs.stringify(data)
+   let obj = {
+      method: type, url: '/elder', data
+   }
+   console.log(obj)
+   return service(
+      obj
+   )
+}
+
+// 老人列表删除接口
+export function elderDel (id) {
    return service({
       method: 'delete',
-      url: `/students/${id}`
+      url: `/elder/${id}`
    })
 }
 
@@ -39,11 +59,11 @@ export function studentDel (id) {
 // }
 
 
-// 信息列表新增和修改接口
-export function info (type, data) {
+// 亲属列表新增和修改接口
+export function relative (type, data) {
    data = qs.stringify(data)
    let obj = {
-      method: type, url: '/info', data
+      method: type, url: '/relative', data
    }
    console.log(obj)
    return service(
@@ -51,19 +71,19 @@ export function info (type, data) {
    )
 }
 
-// 信息列表查询接口
-export function getInfo () {
+// 亲属列表查询接口
+export function getRelativeInfo () {
    return service({
       method: "get",
-      url: "/info"
+      url: "/relative"
    })
 }
 
 // 信息列表删除接口
-export function infoDel (id) {
+export function relativeDel (id) {
    return service({
       method: 'delete',
-      url: `/info/${id}`
+      url: `/relative/${id}`
    })
 }
 

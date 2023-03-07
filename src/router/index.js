@@ -9,7 +9,7 @@ export default new Router({
       {
          path: '/',
          redirect: '/login',
-         name: '首页',
+         name: '登录页',
          hidden: true,
          component: () => import('@/components/Login')
       },
@@ -20,6 +20,24 @@ export default new Router({
          component: () => import('@/components/Login')
       },
       {
+         path: '/index',
+         name: '首页',
+         hidden: true,
+         component: () => import('@/components/Index')
+      },
+      {
+         path: '/admin/login',
+         name: 'AdminLogin',
+         hidden: true,
+         component: () => import('@/components/AdminLogin')
+      },
+      {
+         path: '/register',
+         name: 'Register',
+         hidden: true,
+         component: () => import('@/components/register')
+      },
+      {
          path: '*',
          name: 'NotFound',
          hidden: true,
@@ -27,41 +45,54 @@ export default new Router({
       },
       {
          path: '/home',
-         name: "学生管理",
+         name: "人员管理",
          iconClass: 'fa fa-users',
-         redirect: 'home/student',
+         redirect: 'home/elder',
          component: () => import('@/components/Home'),
          children: [
             {
-               path: '/home/student',
-               name: '学生列表',
-               iconClass: 'fa fa-list',
-               component: () => import('@/components/students/StudentList')
+               path: '/home/elder',
+               name: '老人列表',
+               component: () => import('@/components/people/ElderList')
             },
             {
-               path: '/home/info',
-               name: '信息列表',
-               iconClass: 'fa fa-list-alt',
-               component: () => import('@/components/students/InfoList')
+               path: '/home/relative',
+               name: '亲属列表',
+               component: () => import('@/components/people/RelativeList')
             },
             {
-               path: '/home/infos',
-               name: '信息管理',
-               iconClass: 'fa fa-list-alt',
-               component: () => import('@/components/students/InfoLists')
-            },
-            {
-               path: '/home/work',
-               name: '作业列表',
-               iconClass: 'fa fa-list-ul',
-               component: () => import('@/components/students/WorkList')
-            },
-            {
-               path: '/home/works',
-               name: '作业管理',
-               iconClass: 'fa fa-th-list',
-               component: () => import('@/components/students/WorkMent')
+               path: '/home/employee',
+               name: '劳工管理',
+               component: () => import('@/components/people/EmployeeList')
             }
+         ]
+      },
+      {
+         path: '/home',
+         name: "文章管理",
+         iconClass: 'fa fa-th-list',
+         component: () => import('@/components/Home'),
+         children: [
+            {
+               path: '/home/article',
+               name: '文章列表',
+               component: () => import('@/components/article/ArticleList')
+            },
+            {
+               path: '/home/moderation',
+               name: '文章审核',
+               component: () => import('@/components/article/ArticleModeration')
+            },
+            {
+               path: '/home/common',
+               name: '评论管理',
+               component: () => import('@/components/article/CommonMent')
+            },
+            {
+               path: '/home/carousel',
+               name: '轮播图管理',
+               component: () => import('@/components/article/CarouselMent')
+            },
          ]
       },
       {

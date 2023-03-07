@@ -22,3 +22,15 @@ export function pwdRule (rule, value, callback) {
       callback()
    }
 }
+// 昵称匹配
+export function nickRule (rule, value, callback) {
+   // 请输入4-10位昵称
+   let reg = /(^[a-zA-Z0-9]{4,10}$)/
+   if (value === '') {
+      callback(new Error('请输入用户名'))
+   } else if (!reg.test(value)) {
+      callback(new Error('请输入4-10位用户名'))
+   } else {
+      callback()
+   }
+}

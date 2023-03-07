@@ -12,7 +12,6 @@
                <el-input type="password" v-model="form.password"></el-input>
             </el-form-item>
             <el-button type="primary" @click="login('form')">登录</el-button>
-            <el-button type="primary" @click="register()">注册</el-button>
          </el-form>
       </el-card>
 
@@ -58,7 +57,7 @@ export default {
                      setToken('username', res.data.username)
                      setToken('token', res.data.token)
                      this.$message({ message: res.data.message, type: 'success' })
-                     this.$router.push('/index')
+                     this.$router.push('/home')
                   }
                })
             } else {
@@ -99,8 +98,8 @@ export default {
       }
 
       .el-button {
-         width: 40%;
-         float: left;
+         width: 80%;
+         float: center;
          display: inline;
          margin: 20px 20px;
       }

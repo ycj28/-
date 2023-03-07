@@ -1,8 +1,8 @@
 <template>
    <div class="header">
       <el-header>
-         <div class="title">通用管理系统</div>
-         <div>{{ name }}</div>
+         <div class="title">养老后台管理系统</div>
+         <span>你好，<el-link type="primary">{{ name }}</el-link> ！</span>
       </el-header>
    </div>
 </template>
