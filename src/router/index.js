@@ -20,12 +20,6 @@ export default new Router({
          component: () => import('@/components/Login')
       },
       {
-         path: '/index',
-         name: '首页',
-         hidden: true,
-         component: () => import('@/components/Index')
-      },
-      {
          path: '/admin/login',
          name: 'AdminLogin',
          hidden: true,
@@ -43,6 +37,28 @@ export default new Router({
          hidden: true,
          component: () => import('@/components/NotFound')
       },
+      {
+         path: '/body/:aId',
+         name: '文章详情页',
+         hidden: true,
+         component: () => import('@/components/index/Body')
+      }
+      ,
+      {
+         path: '/index',
+         name: '首页列表',
+         hidden: true,
+         redirect: 'index/index',
+         component: () => import('@/components/HomeIndex'),
+         children: [
+            {
+               path: '/index/index',
+               name: '首页',
+               component: () => import('@/components/index/Index')
+            },
+         ]
+      },
+
       {
          path: '/home',
          name: "人员管理",

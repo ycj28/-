@@ -10,8 +10,14 @@
 import { getTableData } from '../../utils/table.js'
 export default {
    props: {
-      "total": Number,
-      "url": String
+      url: {
+         type: String,
+         default: ''
+      },
+      total: {
+         type: Number,
+         default: 10
+      }
    },
    data () {
       return {
@@ -20,17 +26,40 @@ export default {
       }
    },
    created () {
-      getTableData(this.$parent, '/works', { page: this.page, size: this.size }, ['completed'])
+
+   },
+   mounted () {
+      this.getList()
    },
    methods: {
+      async getList () {
+         getTableData(this.$parent, this.url, { page: this.page, size: this.size })
+         // this.$emit('name', this.size)
+         // const data = await getTableData(this.$parent, this.url, { page: this.page, size: this.size })
+         // axios.get('http://localhost:8080/api/elder?page=1&size=10').then(res => {
+         //    console.log('res', res);
+         // })
+         // axios.get('http://localhost:8080/api/elder?page=1&size=10', {
+         //    params: {
+         //       page: 1,
+         //       size: 10
+         //    }
+         // }).then(res => {
+         //    console.log('res', res);
+         // })
+         // console.log('data', data);
+         // const { data } = await getTableData(this.url, { page: this.page, size: this.size })
+         // console.log('res', data);
+      },
       handleSizeChange (val) {
          this.size = val
          this.page = 1
-         getTableData(this.$parent, '/works', { page: this.page, size: val }, ['completed'])
+         getTableData(this.$parent, this.url, { page: this.page, size: val })
       },
       handleCurrentChange (val) {
          this.page = val
-         getTableData(this.$parent, '/works', { page: val, size: this.size }, ['completed'])
+         getTableData(this.$parent, this.url, { page: val, size: this.size })
+         //, ['completed']
       },
    }
 }

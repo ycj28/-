@@ -1,6 +1,6 @@
 <template>
    <div class="index">
-      <Header />
+      <HeaderIndex />
       <el-container class="content">
          <el-main>
             <div class="cont">
@@ -15,11 +15,11 @@
 </template>
 
 <script>
-import Header from "./common/Header.vue"
+import HeaderIndex from "./common/HeaderIndex.vue"
 import Footer from "./common/Footer.vue"
 export default {
    components: {
-      Header,
+      HeaderIndex,
       Footer,
    },
    data () {

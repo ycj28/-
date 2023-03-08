@@ -17,20 +17,20 @@
       </el-form>
 
 
-      <el-table :data="compData" border style="width: 100%;">
+      <el-table :data="tableData" border style="width: 100%;">
          <el-table-column prop="name" label="姓名" align="center">
          </el-table-column>
          <el-table-column prop="age" label="年龄" align="center">
          </el-table-column>
-         <el-table-column prop="sex_text" label="性别" align="center">
+         <el-table-column prop="gender" label="性别" align="center">
          </el-table-column>
          <el-table-column prop="picture" label="照片" align="center">
          </el-table-column>
-         <el-table-column prop="start_time" label="入院时间" align="center">
+         <el-table-column prop="startTime" label="入院时间" align="center">
          </el-table-column>
          <el-table-column prop="level" label="护理等级" align="center">
          </el-table-column>
-         <el-table-column prop="is_leave" label="是否出院" align="center">
+         <el-table-column prop="isLeave" label="是否出院" align="center">
          </el-table-column>
          <el-table-column prop="dormitory" label="宿舍区域" align="center">
          </el-table-column>
@@ -43,10 +43,7 @@
             </template>
          </el-table-column>
       </el-table>
-      <el-pagination background @size-change="handleSizeChange" :page-sizes="[10, 20, 30, 50]"
-         @current-change="handleCurrentChange" :current-page="currentPage" :page-size="pageSize"
-         layout="total,sizes, prev, pager, next, jumper" :total="total">
-      </el-pagination>
+      <Page :total="total" :url="url"></Page>
 
       <el-dialog :title="status ? '添加学生信息' : '修改学生信息'" :visible.sync="dialogFormVisible" width="500px">
          <el-form :model="form" :rules="rules" ref="form">
@@ -57,12 +54,12 @@
                <el-input v-model="form.age" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="性别" :label-width="formLabelWidth" prop="sex">
-               <el-radio v-model="form.sex" label="1">男</el-radio>
-               <el-radio v-model="form.sex" label="2">女</el-radio>
+               <el-radio v-model="form.gender" label="男">男</el-radio>
+               <el-radio v-model="form.gender" label="女">女</el-radio>
             </el-form-item>
             <el-form-item label="是否出院" :label-width="formLabelWidth" prop="picture">
-               <el-radio v-model="form.is_leave" label="0">已出院</el-radio>
-               <el-radio v-model="form.is_leave" label="1">未出院</el-radio>
+               <el-radio v-model="form.isLeave" label="0">已出院</el-radio>
+               <el-radio v-model="form.isLeave" label="1">未出院</el-radio>
             </el-form-item>
             <el-form-item label="老人照片" :label-width="formLabelWidth" prop="is_leave">
                <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/"
@@ -84,7 +81,7 @@
                <el-input v-model="form.dormitory" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="入院时间" :label-width="formLabelWidth" prop="time">
-               <el-date-picker v-model="form.time" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" type="date"
+               <el-date-picker v-model="form.startTime" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" type="date"
                   placeholder="选择日期">
                </el-date-picker>
             </el-form-item>
@@ -102,25 +99,28 @@
  
 <script>
 import { delData, getData, changeInfo } from "../../utils/table.js"
+import Page from '../common/Pageing.vue'
 export default {
+   components: {
+      Page
+   },
    data () {
       return {
          tableData: [],
          fileList: [{}],
          dialogFormVisible: false,
-         currentPage: 1,// 当前页数是1
-         pageSize: 10, // 每页显示条数
          total: 0,//
+         url: 'elder',
          formInline: {
             name: ''
          },
          form: {
             name: '',
-            sex: '1',
+            gender: '',
             age: '',
             level: '',
             picture: '',
-            is_leave: '1',
+            isLeave: '',
             dormitory: '',
             address: '',
             time: '',
@@ -129,9 +129,8 @@ export default {
          },
          rules: {
             name: [{ required: true, message: '请输入姓名' }],
-            sex: [{ required: true }],
-            is_leave: [{ required: true }],
-            time: [{ required: true, message: '请选择时间' }],
+            gender: [{ required: true }],
+            isLeave: [{ required: true }],
             dormitory: [{ required: true, message: '请输入地址' }],
             phone: [{ required: true, message: '请输入联系方式' }]
          },
@@ -140,21 +139,16 @@ export default {
       }
    },
    created () {
-      getData(this, '/elder')
-   },
-   computed: {
-      compData () {
-         return this.tableData.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize)
-      }
+      getData(this, this.url)
    },
    methods: {
       find () {
          console.log(this.formInline)
-         this.getData(this.formInline)
+         getData(this, '/elder/byName', this.formInline)
       },
       reset () {
          this.formInline = {}
-         this.getData(this.formInline)
+         getData(this, this.url, { page: 1, size: 10 })
       },
       edit (row) {
          this.status = false
@@ -162,13 +156,10 @@ export default {
          this.form = { ...row }
       },
       del (row) {
-         console.log(row)
-         delData(this, 'elder', row.id, getData)
+         delData(this, this.url, row.id, getData)
       },
       addElder () {
          this.form = {
-            sex: '1',
-            is_leave: '1',
          },
             this.status = true
          this.dialogFormVisible = true
@@ -182,18 +173,12 @@ export default {
             if (valid) {
                let methods = ''
                this.status ? methods = 'post' : methods = 'put'
-               changeInfo(this, methods, '/elder', this.form, getData)
+               changeInfo(this, methods, '/elder', JSON.stringify(this.form), getData)
+               this.dialogFormVisible = false
+               this.$refs[form].resetFields()
+
             }
          })
-      },
-      handleSizeChange (val) {
-         this.pageSize = val
-         this.currentPage = 1
-         console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange (val) {
-         this.currentPage = val
-         console.log(`当前页: ${val}`);
       },
       handleRemove (file, fileList) {
          console.log(file, fileList);

@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { getToken } from '../src/utils/setTokens'
 import { Message } from 'element-ui'
-
+axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
+axios.defaults.headers.put['Content-Type'] = 'application/json;charset=UTF-8';
 const service = axios.create({
    baseURL: '/api', // baseURL会自动加在请求地址上
    timeout: 3000
