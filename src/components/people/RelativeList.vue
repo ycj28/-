@@ -1,6 +1,15 @@
 <template>
    <div class="relativeList">
-      <el-form :inline="true" class="demo-form-inline" size="small">
+      <el-form :inline="true" :model="formInline" class="demo-form-inline" size="small">
+         <el-form-item i>
+            <el-input v-model="formInline.name" placeholder="输入亲属姓名或老人姓名查询"></el-input>
+         </el-form-item>
+         <el-form-item>
+            <el-button type="primary" icon="el-icon-search" @click="find">查询</el-button>
+         </el-form-item>
+         <el-form-item>
+            <el-button type="primary" icon="el-icon-refresh-right" @click="reset">重置</el-button>
+         </el-form-item>
          <el-form-item>
             <el-button type="primary" icon="el-icon-circle-plus" @click="addRelative()">新增</el-button>
          </el-form-item>
@@ -9,9 +18,9 @@
       <el-table :data="tableData" border style="width: 100%;">
          <el-table-column prop="name" label="姓名" align="center">
          </el-table-column>
-         <el-table-column prop="e_name" label="老人姓名" align="center">
+         <el-table-column prop="ename" label="老人姓名" align="center">
          </el-table-column>
-         <el-table-column prop="sex" label="性别" align="center">
+         <el-table-column prop="gender" label="性别" align="center">
          </el-table-column>
          <el-table-column prop="phone" label="电话号码" align="center">
          </el-table-column>
@@ -38,11 +47,11 @@
                <el-input v-model="form.name" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="老人姓名" :label-width="formLabelWidth" prop="name">
-               <el-input v-model="form.e_name" autocomplete="off"></el-input>
+               <el-input v-model="form.ename" autocomplete="off" :disabled="this.status ? false : true"></el-input>
             </el-form-item>
             <el-form-item label="性别" :label-width="formLabelWidth" prop="sex">
-               <el-radio v-model="form.sex" label="1">男</el-radio>
-               <el-radio v-model="form.sex" label="2">女</el-radio>
+               <el-radio v-model="form.gender" label="男">男</el-radio>
+               <el-radio v-model="form.gender" label="女">女</el-radio>
             </el-form-item>
             <el-form-item label="电话号码" :label-width="formLabelWidth" prop="age">
                <el-input v-model="form.phone" autocomplete="off"></el-input>
@@ -73,17 +82,21 @@ export default {
          currentPage: 1,// 当前页数是1
          pageSize: 10, // 每页显示条数
          total: 0,//
+         url: '/relatives',
+         formInline: {
+            name: ''
+         },
          form: {
             name: '',
             e_name: '',
-            sex: '1',
+            gender: '1',
             phone: '',
             relationship: '',
             address: '',
          },
          rules: {
             name: [{ required: true, message: '请输入姓名' }],
-            sex: [{ required: true }],
+            gender: [{ required: true }],
             address: [{ required: true, message: '请输入地址' }],
             phone: [{ required: true, message: '请输入联系方式' }]
          },
@@ -92,9 +105,17 @@ export default {
       }
    },
    created () {
-      getData(this, '/relative')
+      getData(this, this.url)
    },
    methods: {
+      find () {
+         console.log(this.formInline)
+         getData(this, '/relatives/byName', this.formInline)
+      },
+      reset () {
+         this.formInline = {}
+         getData(this, this.url, { page: 1, size: 10 })
+      },
       edit (row) {
          this.status = false
          this, this.dialogFormVisible = true
@@ -102,11 +123,10 @@ export default {
       },
       del (row) {
          console.log(row)
-         delData(this, 'relative', row.id, getData)
+         delData(this, 'relatives', row.id, getData)
       },
       addRelative () {
          this.form = {
-            sex: '1'
          },
             this.status = true
          this.dialogFormVisible = true
@@ -120,7 +140,7 @@ export default {
             if (valid) {
                let methods = ''
                this.status ? methods = 'post' : methods = 'put'
-               changeInfo(this, methods, '/relative', this.form, getData)
+               changeInfo(this, methods, this.url, this.form, getData)
             }
          })
       },

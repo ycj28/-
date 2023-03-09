@@ -3,7 +3,6 @@ export function getData (root, url, params) {
    if (params === undefined) {
       params = { page: 1, size: 10 }
    }
-   console.log(params);
    root.service.get(url, { params: params || {} })
       .then(res => {
          if (res.data.status === 200) {
