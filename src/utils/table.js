@@ -50,14 +50,14 @@ export function delData (root, url, id, callFun) {
       })
 }
 
-// 逻辑删除方法封装
-export function logicDel (root, url, id, callFun) {
-   root.$alert('你确定要删除吗？', '提示', {
+// 修改方法封装
+export function modifyData (root, url, id, callFun) {
+   root.$alert('你确定要执行此操作吗？', '提示', {
       confirmButtonText: '确定',
       callback: () => {
          root.service.put(`${url}/${id}`).then(res => {
             if (res.data.status === 200) {
-               callFun(root, url)
+               callFun(root, root.url)
                root.$message({ message: res.data.message, type: 'success' })
             }
          })
@@ -83,6 +83,25 @@ export const getTableData = (root, url, params) => {
       })
 }
 
+// 作业列表获取表格数据方法封装
+export const getContent = (root, url, id) => {
+   root.service.get(`${url}/${id}`)
+      .then(res => {
+         console.log(res);
+         if (res.data.status === 200) {
+            if (res.data.data === "") {
+               root.content = " 内容为空 "
+               root.loading = false
+            } else {
+               root.content = res.data.data
+               root.loading = false
+            }
+         }
+      })
+      .catch(err => {
+         throw err
+      })
+}
 
 // 作业列表获取表格数据方法封装
 // export function getTableData (url, params) {

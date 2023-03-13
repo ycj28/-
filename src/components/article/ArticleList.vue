@@ -3,7 +3,7 @@
 
       <el-form :inline="true" :model="formInline" class="demo-form-inline" size="small">
          <el-form-item i>
-            <el-input v-model="formInline.name" placeholder="请在此输入"></el-input>
+            <el-input v-model="formInline.value" placeholder="请在此输入"></el-input>
          </el-form-item>
          <el-form-item>
             <el-button type="primary" icon="el-icon-search" @click="find">查询</el-button>
@@ -13,23 +13,25 @@
          </el-form-item>
       </el-form>
 
-      <el-table :data="compData" border style="width: 100%;">
+      <el-table :data="tableData" border style="width: 100%;">
          <el-table-column prop="title" label="标题" align="center">
          </el-table-column>
          <el-table-column prop="summary" label="简介" align="center">
          </el-table-column>
-         <el-table-column prop="view_counts" label="浏览数量" align="center">
+         <el-table-column prop="viewCounts" label="浏览数量" align="center">
          </el-table-column>
-         <el-table-column prop="like_num" label="点赞数量" align="center">
+         <el-table-column prop="likeNum" label="点赞数量" align="center">
          </el-table-column>
-         <el-table-column prop="collection_num" label="收藏数量" align="center">
+         <el-table-column prop="collectionNum" label="收藏数量" align="center">
          </el-table-column>
          <el-table-column prop="source" label="文章来源" align="center">
          </el-table-column>
          <el-table-column prop="author" label="文章作者" align="center">
          </el-table-column>
          <el-table-column label="文章内容" align="center">
-            <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+            <template slot-scope="scope">
+               <el-button type="info" icon="el-icon-view" @click="handleClick(scope.row)" size="small">查看</el-button>
+            </template>
          </el-table-column>
          <el-table-column label="操作" align="center">
             <template slot-scope="scope">
@@ -37,80 +39,66 @@
             </template>
          </el-table-column>
       </el-table>
-      <el-pagination background @size-change="handleSizeChange" :page-sizes="[10, 20, 30, 50]"
-         @current-change="handleCurrentChange" :current-page="currentPage" :page-size="pageSize"
-         layout="total,sizes, prev, pager, next, jumper" :total="total">
-      </el-pagination>
+      <Page :total="total" :url="url"></Page>
 
 
-      <el-dialog :title="查看文章内容" :visible.sync="dialogFormVisible" width="500px">
-         <el-card class="box-card" ref="form">
-            {{ this.content }}
+      <el-dialog title="文章内容" :visible.sync="dialogFormVisible" width="1000px">
+         <el-card class="box-card">
+            <div class="a_body">
+               {{ content }}
+            </div>
          </el-card>
          <div slot="footer" class="dialog-footer">
-            <el-button @click="closeInfo('form')">取 消</el-button>
-            <el-button type="primary" @click="sure('form')">确 定</el-button>
+            <el-button @click="closeInfo()">取 消</el-button>
+            <el-button type="primary" @click="closeInfo()">确 定</el-button>
          </div>
       </el-dialog>
    </div>
 </template>
  
 <script>
-import { delData, getData } from "../../utils/table.js"
+import { delData, getData, getContent } from "../../utils/table.js"
+import Page from '../common/Pageing.vue'
 export default {
+   components: {
+      Page
+   },
    data () {
       return {
          tableData: [],
          dialogFormVisible: false,
-         currentPage: 1,// 当前页数是1
-         pageSize: 10, // 每页显示条数
          total: 0,//
+         url: 'articles',
          formInline: {
-            name: ''
+            value: ''
          },
-         form: {
-            content: ""
-         },
+         content: ""
+         ,
       }
    },
    created () {
-      getData(this, '/elder')
-   },
-   computed: {
-      compData () {
-         return this.tableData.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize)
-      }
+      getData(this, this.url)
    },
    methods: {
       find () {
          console.log(this.formInline)
-         this.getData(this.formInline)
+         getData(this, '/articles/search', this.formInline)
       },
       reset () {
          this.formInline = {}
-         this.getData(this.formInline)
+         getData(this, this.url, { page: 1, size: 10 })
       },
       del (row) {
          console.log(row)
-         delData(this, 'elder', row.id, getData)
+         delData(this, this.url, row.id, getData)
       },
       handleClick (row) {
-         getData(this, '/getContent', row.id)
+         getContent(this, '/articles/getContent', row.id)
          this.dialogFormVisible = true
       },
-      closeInfo (form) {
+      closeInfo () {
          this.dialogFormVisible = false
-         this.$refs[form].resetFields()
-      },
-      handleSizeChange (val) {
-         this.pageSize = val
-         this.currentPage = 1
-         console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange (val) {
-         this.currentPage = val
-         console.log(`当前页: ${val}`);
-      },
+      }
    }
 }
 </script>
@@ -138,7 +126,12 @@ export default {
    }
 
    .box-card {
-      width: 480px;
+      width: 100%;
+
+      .a_body {
+         font-size: 18px;
+         line-height: normal;
+      }
    }
 }
 </style>
