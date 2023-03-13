@@ -9,22 +9,27 @@
       <el-table :data="tableData" v-loading="loading" border style="width: 100%;">
          <el-table-column prop="name" label="图片名称" align="center">
          </el-table-column>
-         <el-table-column prop="value" label="图片地址" align="center">
+         <el-table-column prop="value" label="图片" align="center">
          </el-table-column>
-         <el-table-column prop="is_show" label="是否显示" align="center">
-            <el-checkbox :v-model="check1" label="显示" border></el-checkbox>
+         <el-table-column prop="isShow" label="是否显示" align="center">
+            <template slot-scope="scope">
+               <span v-if="scope.row.isShow == 1">显示</span>
+               <span v-if="scope.row.isShow == 0">不显示</span>
+            </template>
+         </el-table-column>
+         <el-table-column label="设置" align="center">
+            <template slot-scope="scope">
+               <el-button type="success" size="mini" icon="el-icon-success" @click="passY(scope.row)">显示</el-button>
+               <el-button type="info" size="mini" icon="el-icon-error" @click="passN(scope.row)">不显示</el-button>
+            </template>
          </el-table-column>
          <el-table-column label="操作" align="center">
             <template slot-scope="scope">
-               <el-button type="danger" size="mini" icon="el-icon-success" @click="pass(scope.row)">显示</el-button>
-               <el-button type="danger" size="mini" icon="el-icon-error" @click="del(scope.row)">不显示</el-button>
+               <el-button type="danger" size="mini" icon="el-icon-delete" @click="del(scope.row)"></el-button>
             </template>
          </el-table-column>
       </el-table>
-      <el-pagination background @size-change="handleSizeChange" :page-sizes="[10, 20, 30, 50]"
-         @current-change="handleCurrentChange" :current-page="currentPage" :page-size="pageSize"
-         layout="total,sizes, prev, pager, next, jumper" :total="total">
-      </el-pagination>
+      <Page :total="total" :url="url"></Page>
 
       <el-dialog title="新增轮播图" :visible.sync="dialogFormVisible" width="500px">
          <el-form :model="form" :rules="rules" ref="form">
@@ -46,30 +51,34 @@
 </template>
 
 <script>
-import { logicDel, getData, changeInfo } from "../../utils/table.js"
+import { delData, getData, changeInfo, modifyData } from "../../utils/table.js"
+import Page from '../common/Pageing.vue'
 export default {
+   components: {
+      Page
+   },
    data () {
       return {
          tableData: [],
-         currentPage: 1,// 当前页数是1
-         pageSize: 10, // 每页显示条数
          total: 0,//
+         loading: true,
+         imageUrl: "",
          formLabelWidth: "80px",
          status: true,
          dialogFormVisible: false,
+         url: '/carousels',
          form: {
             name: '',
             value: ''
-         }
+         },
+         rules: {
+            name: [{ required: true, message: '请输入姓名' }],
+            value: [{ required: true, message: '请选择图片' }],
+         },
       }
    },
    created () {
-      getData(this, '/carousel')
-   },
-   computed: {
-      compData () {
-         return this.tableData.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize)
-      }
+      getData(this, this.url)
    },
    methods: {
       addPic () {
@@ -79,23 +88,18 @@ export default {
          },
             this.dialogFormVisible = true
       },
-      pass (row) {
-         logicDel(this, 'carousel', row.id, getData)
+      passY (row) {
+         modifyData(this, this.url + '/passY', row.id, getData)
+      },
+      passN (row) {
+         modifyData(this, this.url + '/passN', row.id, getData)
       },
       del (row) {
          console.log(row)
-         logicDel(this, 'carousel', row.id, getData)
-      },
-      handleSizeChange (val) {
-         this.pageSize = val
-         this.currentPage = 1
-         console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange (val) {
-         this.currentPage = val
-         console.log(`当前页: ${val}`);
+         delData(this, this.url, row.id, getData)
       },
       handleAvatarSuccess (res, file) {
+         console.log(res);
          this.imageUrl = URL.createObjectURL(file.raw);
       },
       beforeAvatarUpload (file) {

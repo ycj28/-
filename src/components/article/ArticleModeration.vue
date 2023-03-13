@@ -5,12 +5,6 @@
          </el-table-column>
          <el-table-column prop="summary" label="简介" align="center">
          </el-table-column>
-         <el-table-column prop="view_counts" label="浏览数量" align="center">
-         </el-table-column>
-         <el-table-column prop="like_num" label="点赞数量" align="center">
-         </el-table-column>
-         <el-table-column prop="collection_num" label="收藏数量" align="center">
-         </el-table-column>
          <el-table-column prop="source" label="文章来源" align="center">
          </el-table-column>
          <el-table-column prop="author" label="文章作者" align="center">

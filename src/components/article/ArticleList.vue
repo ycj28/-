@@ -30,7 +30,7 @@
          </el-table-column>
          <el-table-column label="文章内容" align="center">
             <template slot-scope="scope">
-               <el-button type="info" icon="el-icon-view" @click="handleClick(scope.row)" size="small">查看</el-button>
+               <el-button type="primary" icon="el-icon-view" @click="handleClick(scope.row)" size="small">查看</el-button>
             </template>
          </el-table-column>
          <el-table-column label="操作" align="center">
@@ -81,7 +81,6 @@ export default {
    },
    methods: {
       find () {
-         console.log(this.formInline)
          getData(this, '/articles/search', this.formInline)
       },
       reset () {
@@ -89,7 +88,6 @@ export default {
          getData(this, this.url, { page: 1, size: 10 })
       },
       del (row) {
-         console.log(row)
          delData(this, this.url, row.id, getData)
       },
       handleClick (row) {
