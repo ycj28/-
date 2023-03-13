@@ -35,10 +35,7 @@
             </template>
          </el-table-column>
       </el-table>
-      <el-pagination background @size-change="handleSizeChange" :page-sizes="[10, 20, 30, 50]"
-         @current-change="handleCurrentChange" :current-page="currentPage" :page-size="pageSize"
-         layout="total,sizes, prev, pager, next, jumper" :total="total">
-      </el-pagination>
+      <Page :total="total" :url="url"></Page>
 
 
       <el-dialog :title="status ? '添加亲属信息' : '修改亲属信息'" :visible.sync="dialogFormVisible" width="500px">
@@ -74,13 +71,15 @@
 
 <script>
 import { delData, getData, changeInfo } from "../../utils/table.js"
+import Page from '../common/Pageing.vue'
 export default {
+   components: {
+      Page
+   },
    data () {
       return {
          tableData: [],
          dialogFormVisible: false,
-         currentPage: 1,// 当前页数是1
-         pageSize: 10, // 每页显示条数
          total: 0,//
          url: '/relatives',
          formInline: {
@@ -143,15 +142,6 @@ export default {
                changeInfo(this, methods, this.url, this.form, getData)
             }
          })
-      },
-      handleSizeChange (val) {
-         this.pageSize = val
-         this.currentPage = 1
-         console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange (val) {
-         this.currentPage = val
-         console.log(`当前页: ${val}`);
       }
    }
 }

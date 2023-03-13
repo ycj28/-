@@ -1,8 +1,17 @@
 <template>
    <div class="infoMent">
-      <el-form :inline="true" class="demo-form-inline" size="small">
+      <el-form :inline="true" :model="formInline" class="demo-form-inline" size="small">
+         <el-form-item i>
+            <el-input v-model="formInline.name" placeholder="请输入姓名查询"></el-input>
+         </el-form-item>
          <el-form-item>
-            <el-button type="primary" icon="el-icon-circle-plus" @click="addStudent()">新增</el-button>
+            <el-button type="primary" icon="el-icon-search" @click="find">查询</el-button>
+         </el-form-item>
+         <el-form-item>
+            <el-button type="primary" icon="el-icon-refresh-right" @click="reset">重置</el-button>
+         </el-form-item>
+         <el-form-item>
+            <el-button type="primary" icon="el-icon-circle-plus" @click="addEmployee()">新增</el-button>
          </el-form-item>
       </el-form>
 
@@ -11,11 +20,11 @@
          </el-table-column>
          <el-table-column prop="age" label="年龄" align="center">
          </el-table-column>
-         <el-table-column prop="sex" label="性别" align="center">
+         <el-table-column prop="gender" label="性别" align="center">
          </el-table-column>
          <el-table-column prop="seniority" label="工龄" align="center">
          </el-table-column>
-         <el-table-column prop="start_time" label="入职时间" align="center">
+         <el-table-column prop="startTime" label="入职时间" align="center">
          </el-table-column>
          <el-table-column prop="post" label="职位" align="center">
          </el-table-column>
@@ -23,7 +32,7 @@
          </el-table-column>
          <el-table-column prop="introduce" label="简介" align="center">
          </el-table-column>
-         <el-table-column prop="is_leave" label="是否离职" align="center">
+         <el-table-column prop="isLeave" label="是否离职" align="center">
          </el-table-column>
          <el-table-column prop="likes" label="点赞数" align="center">
          </el-table-column>
@@ -34,19 +43,16 @@
             </template>
          </el-table-column>
       </el-table>
-      <el-pagination background @size-change="handleSizeChange" :page-sizes="[10, 20, 30, 50]"
-         @current-change="handleCurrentChange" :current-page="currentPage" :page-size="pageSize"
-         layout="total,sizes, prev, pager, next, jumper" :total="total">
-      </el-pagination>
+      <Page :total="total" :url="url"></Page>
 
-      <el-dialog :title="status ? '添加学生信息' : '修改学生信息'" :visible.sync="dialogFormVisible" width="500px">
+      <el-dialog :title="status ? '添加劳工信息' : '修改劳工信息'" :visible.sync="dialogFormVisible" width="500px">
          <el-form :model="form" :rules="rules" ref="form">
             <el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
                <el-input v-model="form.name" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="性别" :label-width="formLabelWidth" prop="sex">
-               <el-radio v-model="form.sex" label="1">男</el-radio>
-               <el-radio v-model="form.sex" label="2">女</el-radio>
+               <el-radio v-model="form.gender" label="1">男</el-radio>
+               <el-radio v-model="form.gender" label="2">女</el-radio>
             </el-form-item>
             <el-form-item label="年龄" :label-width="formLabelWidth" prop="age">
                <el-input v-model="form.age" autocomplete="off"></el-input>
@@ -69,11 +75,11 @@
                </el-upload>
             </el-form-item>
             <el-form-item label="是否离职" :label-width="formLabelWidth" prop="sex">
-               <el-radio v-model="form.is_leave" label="0">未离职</el-radio>
-               <el-radio v-model="form.is_leave" label="1">已离职</el-radio>
+               <el-radio v-model="form.isLeave" label="0">未离职</el-radio>
+               <el-radio v-model="form.isLeave" label="1">已离职</el-radio>
             </el-form-item>
             <el-form-item label="入职时间" :label-width="formLabelWidth" prop="time">
-               <el-date-picker v-model="form.start_time" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" type="date"
+               <el-date-picker v-model="form.startTime" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" type="date"
                   placeholder="选择日期">
                </el-date-picker>
             </el-form-item>
@@ -91,42 +97,56 @@
 
 <script>
 import { delData, getData, changeInfo } from "../../utils/table.js"
+import Page from '../common/Pageing.vue'
 export default {
+   components: {
+      Page
+   },
    data () {
       return {
          tableData: [],
          fileList: [{}],
-         currentPage: 1,// 当前页数是1
-         pageSize: 10, // 每页显示条数
-         total: 0,
          dialogFormVisible: false,
+         total: 0,//
+         url: '/employee',
+         formInline: {
+            name: ''
+         },
          form: {
             name: '',
-            sex: '1',
+            gender: '1',
             age: '',
             seniority: '',
             post: '',
             introduce: '',
             picture: '',
-            is_leave: '1',
-            start_time: '',
+            isLeave: '1',
+            startTime: '',
             likes: '0',
 
          },
          rules: {
             name: [{ required: true, message: '请输入姓名' }],
-            sex: [{ required: true }],
-            is_leave: [{ required: true, message: '请选择是否离职' }],
-            start_time: [{ required: true, message: '请选择时间' }]
+            gender: [{ required: true }],
+            isLeave: [{ required: true, message: '请选择是否离职' }],
+            startTime: [{ required: true, message: '请选择时间' }]
          },
          formLabelWidth: "80px",
          status: true,
       }
    },
    created () {
-      getData(this, '/employee')
+      getData(this, this.url)
    },
    methods: {
+      find () {
+         console.log(this.formInline)
+         getData(this, '/employee/byName', this.formInline)
+      },
+      reset () {
+         this.formInline = {}
+         getData(this, this.url, { page: 1, size: 10 })
+      },
       edit (row) {
          this.status = false
          this, this.dialogFormVisible = true
@@ -134,11 +154,10 @@ export default {
       },
       del (row) {
          console.log(row)
-         delData(this, 'employee', row.id, getData)
+         delData(this, this.url, row.id, getData)
       },
-      addStudent () {
+      addEmployee () {
          this.form = {
-            sex: '1'
          },
             this.status = true
          this.dialogFormVisible = true
@@ -158,7 +177,7 @@ export default {
                // }
                let methods = ''
                this.status ? methods = 'post' : methods = 'put'
-               changeInfo(this, methods, '/employee', this.form, getData)
+               changeInfo(this, methods, this.url, this.form, getData)
             }
          })
       },
