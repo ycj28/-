@@ -1,28 +1,112 @@
 <template>
    <div>
-      <el-descriptions class="margin-top" title="无边框列表" :column="3">
-         <template slot="extra">
-            <el-button type="primary" size="small">操作</el-button>
-         </template>
-         <el-descriptions-item label="用户名">kooriookami</el-descriptions-item>
-         <el-descriptions-item label="手机号">18100000000</el-descriptions-item>
-         <el-descriptions-item label="居住地">苏州市</el-descriptions-item>
-         <el-descriptions-item label="备注">
-            <el-tag size="small">学校</el-tag>
-         </el-descriptions-item>
-         <el-descriptions-item label="联系地址">江苏省苏州市吴中区吴中大道 1188 号</el-descriptions-item>
-      </el-descriptions>
+      <template :data="tableData">
+         <div class="body">
+            <el-row :gutter="20">
+               <div v-for="( item, index) in tableData" :key="index">
+                  <el-col :span="8">
+                     <div class="grid-content bg-purple"><el-card class="box-card">
+                           <div slot="header" class="clearfix">
+                              <span>劳工:{{ item.name }}</span>
+                              <el-button class="el-icon-magic-stick" style="float: right; padding: 3px 0" type="text"
+                                 @click="addlikes(item.id)">点赞</el-button>
+
+                           </div>
+                           <div class="msg">
+                              <div>照片:{{ item.picture }}</div>
+                              <p>年龄:{{ item.age }}&emsp;&emsp;&emsp;性别：{{ item.gender
+                              }}&emsp;&emsp;&emsp;&emsp;入职时间：{{ item.startTime }}</p>
+                              <p>工龄:{{ item.seniority
+                              }}年&emsp;&emsp;&emsp;职位：{{ item.post }}&emsp;&emsp;&emsp;点赞数：{{ item.likes }}</p>
+                              <p>简介：{{ item.introduce }}</p>
+
+                           </div>
+                        </el-card></div>
+                  </el-col>
+               </div>
+            </el-row>
+            <Page :total="total" :url="url"></Page>
+         </div>
+      </template>
+
+
    </div>
 </template>
 
 <script>
+import { getData9, addCount } from "../../utils/table.js"
+import Page from '../common/Pageing9.vue'
 export default {
+   components: {
+      Page
+   },
    data () {
       return {
-
+         tableData: [],
+         total: 0,//
+         url: 'employee',
       };
+   },
+   created () {
+      getData9(this, this.url)
+   },
+   methods: {
+      addlikes (id) {
+         addCount(this, '/employee/addLikes', id, getData9)
+      }
    }
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">  .body {
+     width: 90%;
+     margin: auto;
+
+     .box-card {
+        margin-bottom: 20px;
+
+        .msg {
+           text-align: left;
+
+           p {
+              margin-top: 20px;
+              font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+           }
+        }
+     }
+  }
+
+  .el-row {
+     margin-bottom: 20px;
+
+     &:last-child {
+        margin-bottom: 0;
+     }
+  }
+
+  .el-col {
+     border-radius: 4px;
+  }
+
+  .bg-purple-dark {
+     background: #99a9bf;
+  }
+
+  .bg-purple {
+     background: #d3dce6;
+  }
+
+  .bg-purple-light {
+     background: #e5e9f2;
+  }
+
+  .grid-content {
+     border-radius: 4px;
+     min-height: 36px;
+  }
+
+  .row-bg {
+     padding: 10px 0;
+     background-color: #f9fafc;
+  }
+</style>

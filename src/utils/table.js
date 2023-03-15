@@ -14,6 +14,22 @@ export function getData (root, url, params) {
          throw err
       })
 }
+// 获取表格数据
+export function getData9 (root, url, params) {
+   if (params === undefined) {
+      params = { page: 1, size: 9 }
+   }
+   root.service.get(url, { params: params || {} })
+      .then(res => {
+         if (res.data.status === 200) {
+            root.tableData = res.data.data
+            root.total = res.data.total
+         }
+      })
+      .catch(err => {
+         throw err
+      })
+}
 
 
 // 后台新增和修改方法的封装
@@ -164,7 +180,6 @@ export function addCount (root, url, id) {
    root.service.put(`${url}/${id}`)
       .then(res => {
          if (res.data.status === 200) {
-            root.tableData.viewCounts = res.data.data
             root.total = res.data.total
          }
       })
