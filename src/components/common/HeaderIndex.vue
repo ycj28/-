@@ -15,7 +15,7 @@
             <el-submenu index="5">
                <template slot="title"><span>你好，<el-link type="primary">{{ name
                }}</el-link> !</span></template>
-               <el-menu-item @click="edit(scope.row)">注 销</el-menu-item>
+               <el-menu-item @click="loginout()">注 销</el-menu-item>
                <el-menu-item index="">修改密码</el-menu-item>
                <el-menu-item index="2-3">个人中心</el-menu-item>
                <el-menu-item index="2-4">个人收藏</el-menu-item>
@@ -26,7 +26,7 @@
    </div>
 </template>
 <script>
-import { getToken } from '../../utils/setTokens.js'
+import { getToken, removeToken } from '../../utils/setTokens.js'
 export default {
    data () {
       return {
@@ -43,6 +43,16 @@ export default {
    methods: {
       handleSelect (key, keyPath) {
          console.log(key, keyPath);
+      },
+      loginout () {
+         removeToken('username')
+         this.service.get('/logout')
+            .then((res) => {
+               if (res.data.status === 200) {
+                  this.$message({ message: res.data.message, type: 'success' })
+                  this.$router.push('/login')
+               }
+            })
       }
    }
 }

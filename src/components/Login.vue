@@ -55,8 +55,9 @@ export default {
                   */
                login(this.form).then(res => {
                   if (res.data.status === 200) {
-                     setToken('username', res.data.username)
-                     setToken('token', res.data.token)
+                     console.log(res)
+                     setToken('username', res.data.data.username)
+                     setToken('token', res.data.data.token)
                      this.$message({ message: res.data.message, type: 'success' })
                      this.$router.push('/index')
                   }

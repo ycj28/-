@@ -12,10 +12,11 @@ export function login (data) {
 }
 
 // 注册接口
-export function register () {
+export function register (data) {
    return service({
       method: 'post',
-      url: '/register'
+      url: '/register',
+      data
    })
 }
 
