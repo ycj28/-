@@ -2,6 +2,11 @@ import Vue from 'vue'
 import Router from 'vue-router'
 // import Home from '../components/Home.vue'
 
+const originalPush = Router.prototype.push
+Router.prototype.push = function push (location) {
+   return originalPush.call(this, location).catch(err => err)
+}
+
 Vue.use(Router)
 
 export default new Router({
@@ -36,12 +41,6 @@ export default new Router({
          name: 'NotFound',
          hidden: true,
          component: () => import('@/components/NotFound')
-      },
-      {
-         path: '/body/:aId',
-         name: '文章详情页',
-         hidden: true,
-         component: () => import('@/components/index/Body')
       }
       ,
       {
@@ -53,9 +52,38 @@ export default new Router({
          children: [
             {
                path: '/index/index',
-               name: '首页',
+               name: '资讯信息',
+               hidden: true,
+               show: true,
                component: () => import('@/components/index/Index')
             },
+            {
+               path: '/index/employee',
+               name: '劳工介绍',
+               hidden: true,
+               show: true,
+               component: () => import('@/components/index/Employee')
+            },
+            {
+               path: '/index/shore',
+               name: '养老商城',
+               hidden: true,
+               show: true,
+               component: () => import('@/components/HomeIndex')
+            },
+            {
+               path: '/index/advice',
+               name: '建言献策',
+               hidden: true,
+               show: true,
+               component: () => import('@/components/HomeIndex')
+            },
+            {
+               path: '/body/:aId',
+               name: '文章详情页',
+               hidden: true,
+               component: () => import('@/components/index/Body')
+            }
          ]
       },
 

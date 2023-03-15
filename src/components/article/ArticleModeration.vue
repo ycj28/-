@@ -1,6 +1,6 @@
 <template>
    <div class="articleModeration">
-      <el-table :data="compData" border style="width: 100%;">
+      <el-table :data="tableData" border style="width: 100%;">
          <el-table-column prop="title" label="标题" align="center">
          </el-table-column>
          <el-table-column prop="summary" label="简介" align="center">
@@ -19,10 +19,7 @@
             </template>
          </el-table-column>
       </el-table>
-      <el-pagination background @size-change="handleSizeChange" :page-sizes="[10, 20, 30, 50]"
-         @current-change="handleCurrentChange" :current-page="currentPage" :page-size="pageSize"
-         layout="total,sizes, prev, pager, next, jumper" :total="total">
-      </el-pagination>
+      <Page :total="total" :url="url"></Page>
 
 
       <el-dialog :title="查看文章内容" :visible.sync="dialogFormVisible" width="500px">
@@ -38,40 +35,37 @@
 </template>
  
 <script>
-import { delData, getData, logicDel } from "../../utils/table.js"
+import { delData, getData } from "../../utils/table.js"
+import Page from '../common/Pageing.vue'
 export default {
+   components: {
+      Page
+   },
    data () {
       return {
          tableData: [],
          dialogFormVisible: false,
-         currentPage: 1,// 当前页数是1
-         pageSize: 10, // 每页显示条数
          total: 0,//
+         url: 'articles',
          form: {
             content: ""
          },
       }
    },
    created () {
-      getData(this, '/elder')
-   },
-   computed: {
-      compData () {
-         return this.tableData.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize)
-      }
+      getData(this, this.url)
    },
    methods: {
       find () {
-         console.log(this.formInline)
          this.getData(this.formInline)
       },
       reset () {
          this.formInline = {}
          this.getData(this.formInline)
       },
-      pass (row) {
-         logicDel(this, 'carousel', row.id, getData)
-      },
+      // pass (row) {
+      //    logicDel(this, 'carousel', row.id, getData)
+      // },
       del (row) {
          console.log(row)
          delData(this, 'elder', row.id, getData)
@@ -83,16 +77,7 @@ export default {
       closeInfo (form) {
          this.dialogFormVisible = false
          this.$refs[form].resetFields()
-      },
-      handleSizeChange (val) {
-         this.pageSize = val
-         this.currentPage = 1
-         console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange (val) {
-         this.currentPage = val
-         console.log(`当前页: ${val}`);
-      },
+      }
    }
 }
 </script>

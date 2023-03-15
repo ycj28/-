@@ -2,7 +2,7 @@
    <div class="articleList">
 
       <el-form :inline="true" :model="formInline" class="demo-form-inline" size="small">
-         <el-form-item i>
+         <el-form-item>
             <el-input v-model="formInline.value" placeholder="请在此输入"></el-input>
          </el-form-item>
          <el-form-item>
@@ -82,6 +82,7 @@ export default {
    methods: {
       find () {
          getData(this, '/articles/search', this.formInline)
+         console.log(this.formInline)
       },
       reset () {
          this.formInline = {}

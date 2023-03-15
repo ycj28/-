@@ -10,51 +10,71 @@
          </div>
 
          <div class="card">
-            <el-card class="box-card">
-               <div slot="header" class="clearfix">
-                  <h1 class="el-icon-medal">最热标签</h1>
-               </div>
-               <div v-for="(item, index) in 4" :key="index" class="text item">
-                  <tr>
-                     <span @click="$router.push(`/body/${item}`)">title o</span>
-                  </tr>
-               </div>
-            </el-card>
+            <template :data="hotData">
+               <el-card class="box-card">
+                  <div slot="header" class="clearfix">
+                     <h1 class="el-icon-medal">最热资讯</h1>
+                  </div>
+                  <div v-for="(item, index) in hotData" :key="index" class="text item">
+                     <tr>
+                        <div @click="$router.push(`/body/${item.bodyId}`)"> {{ index + 1 }}、{{ item.title }}</div>
+                     </tr>
+                  </div>
+               </el-card>
+            </template>
+
          </div>
       </div>
 
       <div class="body">
-         <ul v-for="(item, index) in 10" :key="index" @click="$router.push(`/body/${item}`)">
-            <el-card class="box-card" :data="compData" shadow="hover">
-               <div class="whole">
-                  <div class="header">Header</div>
-                  <div class="left">
-                     <div class="aside">Aside</div>
+         <template :data="tableData">
+            <ul v-for="(item, index) in tableData" :key="index" @click="$router.push(`/body/${item.bodyId}`)">
+               <el-card class="box-card" shadow="hover">
+                  <div class="whole">
+                     <div class="header">
+                        <a href="#">{{ item.title }}</a>
+                     </div>
+                     <div class="left">
+                        <div class="aside">image</div>
 
+                     </div>
+                     <div class="right">
+                        <div class="main">&emsp; &ensp; {{ item.summary }}</div>
+                        <div class="footer">
+                           <div class="f_left">
+                              <i class="el-icon-star-off"></i>{{ item.collectionNum }}&emsp;<i
+                                 class="el-icon-magic-stick"></i>{{ item.likeNum }}&emsp;<i class="el-icon-view"></i>{{
+                                    item.viewCounts }}
+                           </div>
+                           <div class="f_right">
+                              {{ item.author }}&emsp;{{ item.source }}&emsp;{{ item.createTime }}
+                           </div>
+                        </div>
+                     </div>
                   </div>
-                  <div class="right">
-                     <div class="main">Main</div>
-                     <div class="footer">Footer</div>
-                  </div>
-               </div>
-            </el-card>
-         </ul>
+               </el-card>
+            </ul>
+         </template>
+
 
       </div>
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
-         :current-page="currentPage" :page-size="pageSize" layout="total, prev, pager, next, jumper" :total="total">
-      </el-pagination>
+      <Page :total="total" :url="url"></Page>
    </div>
 </template>
 
 <script>
+import { getData, getHotData } from "../../utils/table.js"
+import Page from '../common/Pageing.vue'
 export default {
+   components: {
+      Page
+   },
    data () {
       return {
          tableData: [],
-         currentPage: 1,// 当前页数是1
-         pageSize: 10, // 每页显示条数
+         hotData: [],
          total: 0,//
+         url: 'articles',
          bannerList: [require('../../assets/car1.jpg'), require('../../assets/car2.jpg'), require('../../assets/car3.jpg')],
          className: ""//轮播图名字
       }
@@ -66,28 +86,17 @@ export default {
          this.className = "lun-img-two";
       }, 300);
    },
-   computed: {
-      compData () {
-         return this.tableData.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize)
-      }
+   created () {
+      getData(this, this.url)
+      getHotData(this, this.url + '/hotList')
    },
    methods: {
-      changeImg (e) {
-         console.log(e, "当前下标"); //可以打印当前轮播图下标
+      changeImg () {
          this.className = "lun-img";
          setTimeout(() => {
             this.className = "lun-img-two";
          }, 300);
 
-      },
-      handleSizeChange (val) {
-         this.pageSize = val
-         this.currentPage = 1
-         console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange (val) {
-         this.currentPage = val
-         console.log(`当前页: ${val}`);
       },
       getbody (value) {
          console.log(value)
@@ -143,9 +152,14 @@ export default {
       .card {
          float: right;
          margin-left: 30px;
+         cursor: pointer;
 
          .text {
-            font-size: 14px;
+            font-size: 15px;
+            font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+            font-style: normal;
+            font-weight: bold;
+            color: rgb(221, 83, 83);
          }
 
          .item {
@@ -174,30 +188,47 @@ export default {
 
       .header {
          width: 100%;
-         line-height: 30px;
-         font-size: 28px;
+         height: 23px;
+         line-height: 22px;
+         font-size: 20px;
+         font-weight: bolder;
          display: flex;
       }
 
       .left {
          float: left;
-         width: 200px;
-         height: 110px;
+         width: 18%;
+         height: 130px;
+         border: #475669 1px solid;
+         margin-top: 10px;
       }
 
       .right {
-         width: 75%;
+         width: 80%;
          float: right;
          height: 130px;
+         margin-top: 10px;
       }
 
       .main {
          height: 110px;
          text-align: left;
+         line-height: normal;
+
       }
 
       .footer {
-         float: right;
+         color: rgba(0, 0, 0, 0.5);
+         font-family: "San Francisco ui";
+         font-size: small;
+
+         .f_left {
+            float: left;
+         }
+
+         .f_right {
+            float: right;
+         }
       }
 
       .box-card {

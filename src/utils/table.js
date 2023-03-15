@@ -16,7 +16,7 @@ export function getData (root, url, params) {
 }
 
 
-// 新增和修改方法的封装
+// 后台新增和修改方法的封装
 export function changeInfo (root, method, url, data, callback) {
    root.service[method](url, data)
       .then(res => {
@@ -24,6 +24,20 @@ export function changeInfo (root, method, url, data, callback) {
             callback(root, url)
             root.dialogFormVisible = false
             root.$refs['form'].resetFields()
+            root.$message({ type: 'success', message: res.data.message })
+         }
+      })
+      .catch(err => {
+         throw err
+      })
+}
+
+// 新增方法的封装
+export function insertData (root, url, params) {
+   root.service.post(url, params)
+      .then(res => {
+         if (res.data.status === 200) {
+            root.$refs['formInline'].resetFields()
             root.$message({ type: 'success', message: res.data.message })
          }
       })
@@ -96,6 +110,62 @@ export const getContent = (root, url, id) => {
                root.content = res.data.data
                root.loading = false
             }
+         }
+      })
+      .catch(err => {
+         throw err
+      })
+}
+
+// 作业列表获取表格数据方法封装
+export const getArticleBody = (root, url, id) => {
+   root.service.get(`${url}/${id}`)
+      .then(res => {
+         console.log(res);
+         if (res.data.status === 200) {
+            root.tableData = res.data.data
+            root.loading = false
+         }
+      })
+      .catch(err => {
+         throw err
+      })
+}
+
+// 获取最热资讯列表
+export function getHotData (root, url) {
+   root.service.get(url)
+      .then(res => {
+         if (res.data.status === 200) {
+            root.hotData = res.data.data
+            root.total = res.data.total
+         }
+      })
+      .catch(err => {
+         throw err
+      })
+}
+
+export function getCommon (root, url, id) {
+   root.service.get(`${url}/${id}`)
+      .then(res => {
+         if (res.data.status === 200) {
+            root.commonData = res.data.data
+            root.total = res.data.total
+         }
+      })
+      .catch(err => {
+         throw err
+      })
+}
+
+// 增加计数方法
+export function addCount (root, url, id) {
+   root.service.put(`${url}/${id}`)
+      .then(res => {
+         if (res.data.status === 200) {
+            root.tableData.viewCounts = res.data.data
+            root.total = res.data.total
          }
       })
       .catch(err => {
