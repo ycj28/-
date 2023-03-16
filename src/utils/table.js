@@ -53,7 +53,6 @@ export function insertData (root, url, params) {
    root.service.post(url, params)
       .then(res => {
          if (res.data.status === 200) {
-            root.$refs['formInline'].resetFields()
             root.$message({ type: 'success', message: res.data.message })
          }
       })
@@ -137,7 +136,6 @@ export const getContent = (root, url, id) => {
 export const getArticleBody = (root, url, id) => {
    root.service.get(`${url}/${id}`)
       .then(res => {
-         console.log(res);
          if (res.data.status === 200) {
             root.tableData = res.data.data
             root.loading = false
@@ -176,10 +174,11 @@ export function getCommon (root, url, id) {
 }
 
 // 增加计数方法
-export function addCount (root, url, id) {
-   root.service.put(`${url}/${id}`)
+export function addCount (root, url, data, callFun) {
+   root.service.put(url, data)
       .then(res => {
          if (res.data.status === 200) {
+            callFun(root, root.url)
             root.total = res.data.total
          }
       })

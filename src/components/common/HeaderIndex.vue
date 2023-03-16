@@ -10,7 +10,6 @@
                      <span>{{ child.name }}</span>
                   </el-menu-item>
                </template>
-
             </template>
             <el-submenu index="5">
                <template slot="title"><span>你好，<el-link type="primary">{{ name

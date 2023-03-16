@@ -57,6 +57,7 @@
 </template>
 <script>
 import { getArticleBody, insertData, getCommon } from "../../utils/table.js"
+import { getToken } from '../../utils/setTokens.js'
 export default {
    data () {
       return {
@@ -69,7 +70,7 @@ export default {
             shows: '',
             content: '',
             createTime: '',
-            uid: '',
+            username: getToken('username'),
          },
       }
    },
@@ -80,7 +81,13 @@ export default {
    methods: {
       submit () {
          insertData(this, '/comments', this.formInline, getArticleBody)
-         console.log(this.formInline);
+         this.formInline = {
+            aid: this.$route.params.aId,
+            shows: '',
+            content: '',
+            createTime: '',
+            username: getToken('username'),
+         }
       },
    }
 }

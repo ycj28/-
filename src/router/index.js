@@ -69,7 +69,7 @@ export default new Router({
                name: '养老商城',
                hidden: true,
                show: true,
-               component: () => import('@/components/HomeIndex')
+               component: () => import('@/components/common/HeaderIndex.vue')
             },
             {
                path: '/index/advice',

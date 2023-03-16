@@ -9,7 +9,7 @@
                            <div slot="header" class="clearfix">
                               <span>劳工:{{ item.name }}</span>
                               <el-button class="el-icon-magic-stick" style="float: right; padding: 3px 0" type="text"
-                                 @click="addlikes(item.id)">点赞</el-button>
+                                 @click="addlikes(item)">点赞</el-button>
 
                            </div>
                            <div class="msg">
@@ -51,8 +51,8 @@ export default {
       getData9(this, this.url)
    },
    methods: {
-      addlikes (id) {
-         addCount(this, '/employee/addLikes', id, getData9)
+      addlikes (item) {
+         addCount(this, '/employee/addLikes', item, getData9)
       }
    }
 }
