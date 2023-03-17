@@ -15,9 +15,7 @@
                <template slot="title"><span>你好，<el-link type="primary">{{ name
                }}</el-link> !</span></template>
                <el-menu-item @click="loginout()">注 销</el-menu-item>
-               <el-menu-item index="">修改密码</el-menu-item>
-               <el-menu-item index="2-3">个人中心</el-menu-item>
-               <el-menu-item index="2-4">个人收藏</el-menu-item>
+               <el-menu-item @click="personal()">个人中心</el-menu-item>
             </el-submenu>
          </el-menu>
 
@@ -52,6 +50,9 @@ export default {
                   this.$router.push('/login')
                }
             })
+      },
+      personal () {
+         this.$router.replace('/personal')
       }
    }
 }

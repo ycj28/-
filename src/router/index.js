@@ -83,7 +83,20 @@ export default new Router({
                name: '文章详情页',
                hidden: true,
                component: () => import('@/components/index/Body')
-            }
+            }, {
+               path: '/personal',
+               name: '个人空间',
+               hidden: true,
+               component: () => import('@/components/PersonalSpace'),
+               // children: [
+               //    {
+               //       path: '/personal/space',
+               //       name: '个人中心',
+               //       hidden: true,
+               //       component: () => import('@/components/personal/Space.vue')
+               //    }
+               // ]
+            },
          ]
       },
 

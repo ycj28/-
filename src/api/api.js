@@ -103,3 +103,21 @@ export function travel () {
       url: 'travel'
    })
 }
+
+
+// 用户个人信息接口
+export function personal () {
+   return service({
+      method: 'get',
+      url: '/users',
+   })
+}
+
+// 用户个人信息修改接口
+export function changePersonal (data) {
+   return service({
+      method: 'put',
+      url: '/users',
+      data
+   })
+}
