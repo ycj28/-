@@ -121,3 +121,29 @@ export function changePersonal (data) {
       data
    })
 }
+
+// 用户个人信息修改接口
+export function modifyPwd (data) {
+   return service({
+      method: 'put',
+      url: '/users/modifyPwd',
+      data
+   })
+}
+
+// 取消收藏接口
+export function uncollect (id) {
+   return service({
+      method: 'delete',
+      url: `/favorites/${id}`,
+      id
+   })
+}
+
+// 添加收藏接口
+export function collect (id) {
+   return service({
+      method: 'post',
+      url: `/favorites/${id}`,
+   })
+}

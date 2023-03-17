@@ -21,14 +21,15 @@
                <p>{{ tableData.content }}</p>
             </div>
             <div class="leg">
+               <!-- <template slot-scope="scope"> -->
                <div class="like">
-                  <el-button type="info" icon="el-icon-magic-stick" circle></el-button>
-                  <el-button type="primary" icon="el-icon-magic-stick" circle></el-button>
+                  <el-button type="primary" icon="el-icon-magic-stick" circle @click="addLike(tableData)"></el-button>
                </div>
                <div class="collect">
-                  <el-button type="warning" icon="el-icon-star-off" circle></el-button>
-                  <el-button type="warning" icon="el-icon-star-on" circle></el-button>
+                  <el-button type="warning" :icon="isCollect ? 'el-icon-star-on' : 'el-icon-star-off'" circle
+                     :v-show="isCollect" @click="addCollect(tableData)"></el-button>
                </div>
+               <!-- </template> -->
             </div>
             <div class="foot" :model="formInline">
                <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" placeholder="请在此输入评论"
@@ -56,8 +57,9 @@
    </div>
 </template>
 <script>
-import { getArticleBody, insertData, getCommon } from "../../utils/table.js"
+import { getArticleBody, insertData, getCommon, getCollect, addCount } from "../../utils/table.js"
 import { getToken } from '../../utils/setTokens.js'
+import { uncollect, collect } from '../../api/api.js'
 export default {
    data () {
       return {
@@ -72,11 +74,13 @@ export default {
             createTime: '',
             username: getToken('username'),
          },
+         isCollect: false
       }
    },
    created () {
       getArticleBody(this, this.url + '/getBody', this.$route.params.aId)
       getCommon(this, '/comments/getCommon', this.$route.params.aId)
+      getCollect(this, 'favorites', getToken('token'), this.$route.params.aId)
    },
    methods: {
       submit () {
@@ -87,6 +91,30 @@ export default {
             content: '',
             createTime: '',
             username: getToken('username'),
+         }
+      },
+      addLike (tableData) {
+         addCount(this, '/articles/addLikes', tableData)
+         console.log(tableData)
+      },
+      addCollect (tableData) {
+         if (this.isCollect) {
+            uncollect(tableData.id).then(res => {
+               if (res.data.status === 200) {
+                  this.isCollect = !this.isCollect
+                  this.$message({ message: "取消收藏成功", type: 'success' })
+                  this.$router.push('/body/' + this.$route.params.aId)
+               }
+            })
+         }
+         if (!this.isCollect) {
+            collect(tableData.id).then(res => {
+               if (res.data.status === 200) {
+                  this.isCollect = !this.isCollect
+                  this.$message({ message: "添加收藏成功", type: 'success' })
+                  this.$router.push('/body/' + this.$route.params.aId)
+               }
+            })
          }
       },
    }

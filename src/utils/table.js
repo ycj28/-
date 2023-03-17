@@ -50,6 +50,7 @@ export function changeInfo (root, method, url, data, callback) {
 
 // 新增方法的封装
 export function insertData (root, url, params) {
+
    root.service.post(url, params)
       .then(res => {
          if (res.data.status === 200) {
@@ -97,7 +98,6 @@ export function modifyData (root, url, id, callFun) {
       })
 }
 
-// 作业列表获取表格数据方法封装
 export const getTableData = (root, url, params) => {
    root.service.get(url, { params: params || {} })
       .then(res => {
@@ -112,7 +112,6 @@ export const getTableData = (root, url, params) => {
       })
 }
 
-// 作业列表获取表格数据方法封装
 export const getContent = (root, url, id) => {
    root.service.get(`${url}/${id}`)
       .then(res => {
@@ -180,6 +179,20 @@ export function addCount (root, url, data, callFun) {
          if (res.data.status === 200) {
             callFun(root, root.url)
             root.total = res.data.total
+         }
+      })
+      .catch(err => {
+         throw err
+      })
+}
+
+// 获取收藏
+export function getCollect (root, url, token, aid) {
+   root.service.post(url, { token: token, aid: aid })
+      .then(res => {
+         if (res.data.status === 200) {
+            root.isCollect = res.data.data
+            console.log(root.isCollect)
          }
       })
       .catch(err => {

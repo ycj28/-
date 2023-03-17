@@ -2,7 +2,7 @@
    <div class="elderList">
 
       <el-form :inline="true" :model="formInline" class="demo-form-inline" size="small">
-         <el-form-item i>
+         <el-form-item>
             <el-input v-model="formInline.name" placeholder="请输入姓名查询"></el-input>
          </el-form-item>
          <el-form-item>
@@ -62,7 +62,7 @@
                <el-radio v-model="form.isLeave" label="1">未出院</el-radio>
             </el-form-item>
             <el-form-item label="老人照片" :label-width="formLabelWidth" prop="is_leave">
-               <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/"
+               <el-upload class="upload-demo" action="http://127.0.0.1:8028/resources/static/upload/"
                   :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3"
                   :on-exceed="handleExceed" :file-list="fileList" v-model="form.picture">
                   <el-button size="small" type="primary">点击上传</el-button>
@@ -107,7 +107,10 @@ export default {
    data () {
       return {
          tableData: [],
-         fileList: [{}],
+         fileList: [{
+            name: '',
+            url: ''
+         }],
          dialogFormVisible: false,
          total: 0,//
          url: 'elder',
@@ -119,7 +122,7 @@ export default {
             gender: '',
             age: '',
             level: '',
-            picture: '',
+            picture: '@/assets/bg.jpg',
             isLeave: '',
             dormitory: '',
             address: '',

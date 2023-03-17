@@ -32,7 +32,6 @@
 
    </div>
 </template>
-
 <script>
 import { getData9, addCount } from "../../utils/table.js"
 import Page from '../common/Pageing9.vue'
