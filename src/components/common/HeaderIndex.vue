@@ -34,7 +34,7 @@ export default {
       }
    },
    created () {
-      this.name = getToken('username')
+      this.name = getToken('nickname')
       this.menus = [...this.$router.options.routes]
    },
    methods: {

@@ -3,7 +3,7 @@
       <el-tree :data="menus" show-checkbox node-key="id" :props="defaultProps" ref="tree">
       </el-tree>
       <el-button @click="getCheckedNodes">
-         通过Node获取
+         设置
       </el-button>
    </div>
 </template>

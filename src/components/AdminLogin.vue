@@ -20,7 +20,7 @@
 
 <script>
 import { nameRule, pwdRule } from '../utils/vaildate.js'
-import { login } from '../api/api.js'
+import { loginAdmin } from '../api/api.js'
 import { setToken } from '../utils/setTokens.js'
 export default {
    data () {
@@ -52,10 +52,12 @@ export default {
                      console.log(res)
                   })
                   */
-               login(this.form).then(res => {
+               loginAdmin(this.form).then(res => {
                   if (res.data.status === 200) {
-                     setToken('username', res.data.username)
-                     setToken('token', res.data.token)
+                     console.log(res)
+                     setToken('username', res.data.data.username)
+                     setToken('token', res.data.data.token)
+                     setToken('nickname', res.data.data.nickname)
                      this.$message({ message: res.data.message, type: 'success' })
                      this.$router.push('/home')
                   }

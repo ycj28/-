@@ -11,6 +11,16 @@ export function login (data) {
    })
 }
 
+// 管理员登录接口
+export function loginAdmin (data) {
+   return service({
+      method: 'post',
+      url: '/login/admin',
+      data
+   })
+}
+
+
 // 注册接口
 export function register (data) {
    return service({
@@ -145,5 +155,30 @@ export function collect (id) {
    return service({
       method: 'post',
       url: `/favorites/${id}`,
+   })
+}
+
+// 获取收藏接口接口
+export function getCollectList (data) {
+   return service({
+      method: 'post',
+      url: `/favorites/getList`,
+      data
+   })
+}
+
+// 文章审核通过接口
+export function passArticle (id) {
+   return service({
+      method: 'put',
+      url: `/articlesSpider/${id}`
+   })
+}
+
+// 文章审核不通过接口
+export function unpassArticle (id) {
+   return service({
+      method: 'delete',
+      url: `/articlesSpider/${id}`
    })
 }

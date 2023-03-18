@@ -14,13 +14,13 @@ Vue.prototype.$echarts = echart
 Vue.config.productionTip = false
 
 // 路由导航守卫
-// router.beforeEach((to, from, next) => {
-//    if (!localStorage.getItem('username')) {
-//       if (to.path !== '/login') {
-//          next('/login')
-//       } else next()
-//    } else next()
-// })
+router.beforeEach((to, from, next) => {
+   if (!localStorage.getItem('username')) {
+      if (to.path !== '/login') {
+         next('/login')
+      } else next()
+   } else next()
+})
 
 new Vue({
    router,

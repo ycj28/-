@@ -10,33 +10,39 @@
          <el-table-column prop="author" label="文章作者" align="center">
          </el-table-column>
          <el-table-column label="文章内容" align="center">
-            <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+            <template slot-scope="scope">
+               <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+            </template>
+         </el-table-column>
+         <el-table-column prop="createdTime" label="入库时间" align="center">
          </el-table-column>
          <el-table-column label="操作" align="center">
             <template slot-scope="scope">
                <el-button type="danger" size="mini" icon="el-icon-success" @click="pass(scope.row)">通过</el-button>
-               <el-button type="danger" size="mini" icon="el-icon-error" @click="del(scope.row)">不通过</el-button>
+               <el-button type="danger" size="mini" icon="el-icon-error" @click="unpass(scope.row)">不通过</el-button>
             </template>
          </el-table-column>
       </el-table>
       <Page :total="total" :url="url"></Page>
 
-
-      <el-dialog :title="查看文章内容" :visible.sync="dialogFormVisible" width="500px">
-         <el-card class="box-card" ref="form">
-            {{ this.content }}
+      <el-dialog title="查看文章内容" :visible.sync="dialogFormVisible" width="800px">
+         <el-card class="box-card">
+            <div class="a_body">
+               {{ content }}
+            </div>
          </el-card>
          <div slot="footer" class="dialog-footer">
-            <el-button @click="closeInfo('form')">取 消</el-button>
-            <el-button type="primary" @click="sure('form')">确 定</el-button>
+            <el-button @click="closeInfo()">关 闭</el-button>
          </div>
       </el-dialog>
+
    </div>
 </template>
  
 <script>
-import { delData, getData } from "../../utils/table.js"
+import { delData, getData, getContent } from "../../utils/table.js"
 import Page from '../common/Pageing.vue'
+import { passArticle, unpassArticle } from '../../api/api.js'
 export default {
    components: {
       Page
@@ -46,10 +52,8 @@ export default {
          tableData: [],
          dialogFormVisible: false,
          total: 0,//
-         url: 'articles',
-         form: {
-            content: ""
-         },
+         url: 'articlesSpider',
+         content: ""
       }
    },
    created () {
@@ -63,15 +67,28 @@ export default {
          this.formInline = {}
          this.getData(this.formInline)
       },
-      // pass (row) {
-      //    logicDel(this, 'carousel', row.id, getData)
-      // },
+      pass (row) {
+         passArticle(row.id).then(res => {
+            if (res.data.status === 200) {
+               this.$message({ message: "审核成功", type: 'success' })
+               getData(this, this.url)
+            }
+         })
+      },
+      unpass (row) {
+         unpassArticle(row.id).then(res => {
+            if (res.data.status === 200) {
+               this.$message({ message: "审核成功", type: 'success' })
+               getData(this, this.url)
+            }
+         })
+      },
       del (row) {
          console.log(row)
          delData(this, 'elder', row.id, getData)
       },
       handleClick (row) {
-         getData(this, '/getContent', row.id)
+         getContent(this, this.url + '/getContent', row.id)
          this.dialogFormVisible = true
       },
       closeInfo (form) {
@@ -105,7 +122,12 @@ export default {
    }
 
    .box-card {
-      width: 480px;
+      width: 750px;
+
+      .a_body {
+         font-size: 18px;
+         line-height: normal;
+      }
    }
 }
 </style>

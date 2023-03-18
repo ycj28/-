@@ -2,12 +2,15 @@
    <div class="header">
       <el-header>
          <div class="title">养老后台管理系统</div>
-         <span>你好，<el-link type="primary">{{ name }}</el-link> ！</span>
+         <div>
+            <span>你好，<el-link type="primary">{{ name }}</el-link> ！</span>
+            <el-button type="info" size="mini" @click="loginout()">退出系统</el-button>
+         </div>
       </el-header>
    </div>
 </template>
 <script>
-import { getToken } from '../../utils/setTokens.js'
+import { getToken, removeToken } from '../../utils/setTokens.js'
 export default {
    data () {
       return {
@@ -15,7 +18,19 @@ export default {
       }
    },
    created () {
-      this.name = getToken('username')
+      this.name = getToken('nickname')
+      console.log(this.name)
+   }, methods: {
+      loginout () {
+         removeToken('username')
+         this.service.get('/logout')
+            .then((res) => {
+               if (res.data.status === 200) {
+                  this.$message({ message: res.data.message, type: 'success' })
+                  this.$router.push('/admin/login')
+               }
+            })
+      },
    }
 }
 </script>

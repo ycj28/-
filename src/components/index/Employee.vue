@@ -13,7 +13,7 @@
 
                            </div>
                            <div class="msg">
-                              <div>照片:{{ item.picture }}</div>
+                              <div>照片:<img :src="src" alt=""></div>
                               <p>年龄:{{ item.age }}&emsp;&emsp;&emsp;性别：{{ item.gender
                               }}&emsp;&emsp;&emsp;&emsp;入职时间：{{ item.startTime }}</p>
                               <p>工龄:{{ item.seniority
@@ -44,6 +44,7 @@ export default {
          tableData: [],
          total: 0,//
          url: 'employee',
+         src: require('../../assets/nurse1.jpg')
       };
    },
    created () {

@@ -7,17 +7,21 @@
          <el-tab-pane label="修改密码" name="second">
             <Password></Password>
          </el-tab-pane>
-         <el-tab-pane label="个人收藏" name="third">角色管理</el-tab-pane>
+         <el-tab-pane label="个人收藏" name="third">
+            <Collect></Collect>
+         </el-tab-pane>
       </el-tabs>
    </div>
 </template>
 <script>
 import Space from "../personal/Space.vue"
 import Password from "../personal/Password.vue"
+import Collect from "../personal/Collect.vue"
 export default {
    components: {
       Space,
-      Password
+      Password,
+      Collect
    },
    data () {
       return {

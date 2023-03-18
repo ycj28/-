@@ -35,7 +35,7 @@
                         <a href="#">{{ item.title }}</a>
                      </div>
                      <div class="left">
-                        <div class="aside">image</div>
+                        <div class="aside"><img :src="src" alt=""></div>
 
                      </div>
                      <div class="right">
@@ -76,7 +76,8 @@ export default {
          total: 0,//
          url: 'articles',
          bannerList: [require('../../assets/car1.jpg'), require('../../assets/car2.jpg'), require('../../assets/car3.jpg')],
-         className: ""//轮播图名字
+         className: "",//轮播图名字
+         src: require('../../assets/def.png')
       }
    },
    mounted () {
@@ -109,11 +110,14 @@ export default {
 
 <style lang="scss" scoped>
 .index {
+
+
    a {
       text-decoration: none;
    }
 
    .top {
+      width: 78%;
       display: inline-block;
 
       .block {

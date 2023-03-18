@@ -58,6 +58,7 @@ export default {
                      console.log(res)
                      setToken('username', res.data.data.username)
                      setToken('token', res.data.data.token)
+                     setToken('nickname', res.data.data.nickname)
                      this.$message({ message: res.data.message, type: 'success' })
                      this.$router.push('/index')
                   }

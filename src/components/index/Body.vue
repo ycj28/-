@@ -17,8 +17,8 @@
       tableData.likeNum }}
                </p>
             </div>
-            <div class="body">
-               <p>{{ tableData.content }}</p>
+            <div class="body" v-html="tableData.content">
+
             </div>
             <div class="leg">
                <!-- <template slot-scope="scope"> -->
@@ -149,6 +149,13 @@ export default {
          margin-top: 30px;
          line-height: normal;
          font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
+         p {
+            margin: 20px 0px;
+            font-size: 16px;
+            text-indent: 2em;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+         }
       }
 
       .leg {
