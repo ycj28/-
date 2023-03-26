@@ -33,11 +33,11 @@ export default {
       let myChart = this.$echarts.init(document.getElementById('main1'))
       myChart.setOption({
          title: {
-            text: '进阶',
+            text: '各宿舍区域人数',
          },
          tooltip: {},
          xAxis: {
-            data: ['一班', '二班', '三班', '四班', '五班', '六班']
+            data: ['北区', '南区', '中区', '公寓', '大家乐']
          },
          yAxis: {
 
@@ -45,7 +45,7 @@ export default {
          series: [{
             name: '人数',
             type: 'bar',
-            data: [45, 42, 46, 48, 52, 47]
+            data: [45, 42, 46, 48, 52]
          }]
       })
    },

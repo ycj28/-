@@ -15,7 +15,6 @@
             <el-button type="primary" @click="register()">注册</el-button>
          </el-form>
       </el-card>
-
    </div>
 </template>
 
@@ -59,6 +58,7 @@ export default {
                      setToken('username', res.data.data.username)
                      setToken('token', res.data.data.token)
                      setToken('nickname', res.data.data.nickname)
+                     setToken('admin', res.data.data.admin)
                      this.$message({ message: res.data.message, type: 'success' })
                      this.$router.push('/index')
                   }

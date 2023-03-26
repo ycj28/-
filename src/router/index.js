@@ -185,13 +185,13 @@ export default new Router({
          ]
       },
       {
-         path: '/users',
+         path: '/home',
          name: "用户中心",
          iconClass: 'fa fa-user',
          component: () => import('@/components/Home'),
          children: [
             {
-               path: '/users/user',
+               path: '/home/user',
                name: '权限管理',
                iconClass: 'fa fa-user',
                component: () => import('@/components/users/User')

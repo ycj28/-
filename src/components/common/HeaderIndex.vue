@@ -43,6 +43,7 @@ export default {
       },
       loginout () {
          removeToken('username')
+         console.log(getToken('username'));
          this.service.get('/logout')
             .then((res) => {
                if (res.data.status === 200) {

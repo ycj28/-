@@ -16,10 +16,17 @@ Vue.config.productionTip = false
 // 路由导航守卫
 router.beforeEach((to, from, next) => {
    if (!localStorage.getItem('username')) {
-      if (to.path !== '/login') {
+      if (to.path !== '/login' && to.path !== '/register' && to.path !== '/admin/login') {
+         ElementUI.Message({ message: "还没有进行登录！", type: 'error' })
          next('/login')
       } else next()
-   } else next()
+   }
+   else if (localStorage.getItem('admin') != 1) {
+      if (to.path.search("/home") != -1) {
+         next('*')
+      } else next()
+   }
+   else next()
 })
 
 new Vue({
