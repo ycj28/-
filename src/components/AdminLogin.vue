@@ -2,7 +2,7 @@
    <div class="login">
       <el-card class="box-card">
          <div slot="header" class="clearfix">
-            <span>养老线上平台</span>
+            <span>后台登录</span>
          </div>
          <el-form label-width="80px" :model="form" ref="form" :rules="rules">
             <el-form-item label="账 号" prop="username">

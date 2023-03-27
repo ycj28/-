@@ -29,9 +29,49 @@ export function nickRule (rule, value, callback) {
    // 请输入4-10位昵称
    let reg = /^(?:[\u4e00-\u9fa5·]{2,16})$/
    if (value === '') {
-      callback(new Error('请输入用户名'))
+      callback(new Error('请输入中文昵称'))
    } else if (!reg.test(value)) {
-      callback(new Error('请输入长度2-16用户名'))
+      callback(new Error('请输入长度2-16中文昵称'))
+   } else {
+      callback()
+   }
+}
+
+// 手机号码匹配
+export function phone (rule, value, callback) {
+   // 请输入4-10位昵称
+   let reg = /^(?:(?:\+|00)86)?1\d{10}$/
+   if (value === '') {
+      callback(new Error('请输入手机号码'))
+   } else if (!reg.test(value)) {
+      callback(new Error('请输入正确的手机号码'))
+   } else {
+      callback()
+   }
+}
+
+
+
+// 手机号码匹配
+export function age (rule, value, callback) {
+   // 请输入4-10位昵称
+   let reg = /^(?:[1-9][0-9]?|1[01][0-9]|120)$/;
+   if (value === '') {
+      callback(new Error('请输入年龄'))
+   } else if (!reg.test(value)) {
+      callback(new Error('请输入年龄'))
+   } else {
+      callback()
+   }
+}
+
+// 姓名匹配
+export function name (rule, value, callback) {
+   let reg = /^(?:[\u4e00-\u9fa5·]{2,20})$/
+   if (value === '') {
+      callback(new Error('请输入名字'))
+   } else if (!reg.test(value)) {
+      callback(new Error('请输入正确的名字'))
    } else {
       callback()
    }

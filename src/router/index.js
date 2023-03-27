@@ -108,6 +108,16 @@ export default new Router({
          component: () => import('@/components/Home'),
          children: [
             {
+               path: '/home/elderhome',
+               name: '信息统计',
+               component: () => import('@/components/people/ElderHome')
+            },
+            {
+               path: '/home/addelder',
+               name: '老人入住',
+               component: () => import('@/components/people/AddElder')
+            },
+            {
                path: '/home/elder',
                name: '老人列表',
                component: () => import('@/components/people/ElderList')

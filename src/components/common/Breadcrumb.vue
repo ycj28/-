@@ -2,7 +2,7 @@
    <div>
       <el-card>
          <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/home/elderhome' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item v-for="(item, index) in this.$route.matched" :key="index">
                {{ item.name }}</el-breadcrumb-item>
          </el-breadcrumb>

@@ -22,7 +22,7 @@
          </el-table-column>
          <el-table-column prop="age" label="年龄" align="center">
          </el-table-column>
-         <el-table-column prop="gender" label="性别" align="center">
+         <el-table-column prop="gender" label="性别" align="center" width="80px">
          </el-table-column>
          <el-table-column prop="picture" label="照片" align="center">
          </el-table-column>
@@ -34,9 +34,13 @@
          </el-table-column>
          <el-table-column prop="dormitory" label="宿舍区域" align="center">
          </el-table-column>
+         <el-table-column prop="roomNum" label="房间号" align="center">
+         </el-table-column>
          <el-table-column prop="phone" label="手机号码" align="center">
          </el-table-column>
-         <el-table-column label="操作" align="center">
+         <el-table-column prop="remark" label="备注" align="center" width="200px">
+         </el-table-column>
+         <el-table-column label="操作" align="center" width="120px">
             <template slot-scope="scope">
                <el-button type="danger" size="mini" icon="el-icon-edit" @click="edit(scope.row)"></el-button>
                <el-button type="danger" size="mini" icon="el-icon-delete" @click="del(scope.row)"></el-button>
@@ -45,7 +49,7 @@
       </el-table>
       <Page :total="total" :url="url"></Page>
 
-      <el-dialog :title="status ? '添加学生信息' : '修改学生信息'" :visible.sync="dialogFormVisible" width="500px">
+      <el-dialog :title="status ? '添加老人信息' : '修改老人信息'" :visible.sync="dialogFormVisible" width="500px">
          <el-form :model="form" :rules="rules" ref="form">
             <el-form-item label="姓名" :label-width="formLabelWidth" prop="name">
                <el-input v-model="form.name" autocomplete="off"></el-input>
@@ -80,13 +84,19 @@
             <el-form-item label="宿舍区域" :label-width="formLabelWidth" prop="dormitory">
                <el-input v-model="form.dormitory" autocomplete="off"></el-input>
             </el-form-item>
+            <el-form-item label="房间号" :label-width="formLabelWidth" prop="dormitory">
+               <el-input v-model="form.roomNum" autocomplete="off"></el-input>
+            </el-form-item>
             <el-form-item label="入院时间" :label-width="formLabelWidth" prop="time">
                <el-date-picker v-model="form.startTime" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" type="date"
                   placeholder="选择日期">
                </el-date-picker>
             </el-form-item>
             <el-form-item label="手机号码" :label-width="formLabelWidth" prop="phone">
-               <el-input v-model="form.phone" type="textarea" autocomplete="off"></el-input>
+               <el-input v-model="form.phone" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="备注" :label-width="formLabelWidth" prop="phone">
+               <el-input v-model="form.remark" type="textarea" autocomplete="off"></el-input>
             </el-form-item>
          </el-form>
          <div slot="footer" class="dialog-footer">
@@ -99,6 +109,7 @@
  
 <script>
 import { delData, getData, changeInfo } from "../../utils/table.js"
+import { phone, age, name } from '../../utils/vaildate.js'
 import Page from '../common/Pageing.vue'
 export default {
    components: {
@@ -125,17 +136,19 @@ export default {
             picture: '@/assets/bg.jpg',
             isLeave: '',
             dormitory: '',
+            roomNum: '',
             address: '',
             time: '',
             phone: '',
-
+            remark: '',
          },
          rules: {
-            name: [{ required: true, message: '请输入姓名' }],
+            name: [{ validator: name, trigger: 'blur' }],
             gender: [{ required: true }],
             isLeave: [{ required: true }],
             dormitory: [{ required: true, message: '请输入地址' }],
-            phone: [{ required: true, message: '请输入联系方式' }]
+            phone: [{ validator: phone, trigger: 'blur' }],
+            age: [{ validator: age, trigger: 'blur' }]
          },
          formLabelWidth: "80px",
          status: true,

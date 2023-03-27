@@ -182,3 +182,11 @@ export function unpassArticle (id) {
       url: `/articlesSpider/${id}`
    })
 }
+
+// 文章审核不通过接口
+export function getInformation () {
+   return service({
+      method: 'get',
+      url: `elder/getInfo`
+   })
+}
